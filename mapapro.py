@@ -30,8 +30,14 @@ def plot_vehiculos(vehiculo, voxelarray):
             limites_mapa = voxelarray.shape
             if verificar_coordenadas(x, y, z, vehiculo.largo, vehiculo.ancho, vehiculo.alto, limites_mapa):
                 if not verificar_colision(voxelarray, x, y, z, vehiculo.largo, vehiculo.ancho, vehiculo.alto, limites_mapa):
+                    if vehiculo.nombre == "Avion": # Slicing especifico para el avion
+                        voxelarray[x:x+4,y:y + 1,z:z +1] = True
+                        voxelarray[x + 2:x + 3, y - 1:y + 2, z:z +1] = True
+                        voxelarray[x:x+1,y:y + 1,z:z +2] = True
+                    else:
+                        voxelarray[x:x+vehiculo.largo, y:y+vehiculo.ancho, z:z+vehiculo.alto] = True
+
                     color = vehiculo.color  # Accedemos al color definido en el objeto vehículo
-                    voxelarray[x:x+vehiculo.largo, y:y+vehiculo.ancho, z:z+vehiculo.alto] = True
                     ax.clear()
                     ax.voxels(voxelarray, edgecolor='k', facecolors=color, alpha=0.8)  
                     ax.set_xlabel("X")
