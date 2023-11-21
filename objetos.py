@@ -1,11 +1,12 @@
 class Vehiculo:
-    def __init__(self, nombre, largo, ancho, alto, vida, cant):
+    def __init__(self, nombre, largo, ancho, alto, vida, cant, color):
         self.nombre = nombre
         self.largo = largo
         self.ancho = ancho
         self.alto = alto
         self.vida = vida
         self.cant = cant
+        self.color = color  # Añadimos el atributo de color
 
     def rotar(self):
         self.ancho, self.largo = self.largo, self.ancho
@@ -17,7 +18,7 @@ class Vehiculo:
     
     def crear_vehiculo(self, nombre_p):
         try:
-            cantidad = self.cant  # Obtiene la cantidad desde el objeto Vehiculo correspondiente
+            cantidad = self.cant  
             for i in range(1, cantidad + 1):
                 while True:
                     try:
@@ -33,22 +34,22 @@ class Vehiculo:
 
 class Globo(Vehiculo):
     def __init__(self, nombre):
-        super().__init__("globo", 3, 3, 3, 1, 5)
+        super().__init__("Globo", 3, 3, 3, 1, 5, "blue")
         
 
 class Zepellin(Vehiculo):
     def __init__(self, nombre):
-        super().__init__("zepellin", 5, 2, 2, 3, 2)
+        super().__init__("Zepellin", 5, 2, 2, 3, 2, "green")
         
 
 class Avion(Vehiculo):
     def __init__(self, nombre):
-        super().__init__("avion", 4, 3, 2, 2, 3)
+        super().__init__("Avion", 4, 3, 2, 2, 3, "red")
         
 
 class Elevador(Vehiculo):
     def __init__(self, nombre):
-        super().__init__("elevador", 1, 1, 10, 4, 1)
+        super().__init__("Elevador", 1, 1, 10, 4, 1, "purple")
         
 
     
