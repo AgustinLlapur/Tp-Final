@@ -4,8 +4,29 @@ import random as ran
 import objetos as o
 import matplotlib.pyplot as plt
 
+class hitboard:
 
-def next_turn(hit_board: tuple) -> tuple:
+    def __init__(self, opponent_board) -> None:
+        self.size = (15,15,10)
+        self.board = np.empty(self.size, dtype=object)
+        self.opponent_board = opponent_board
+
+    def create(self):
+        self.board[self.board==None]="?"
+
+    def take_shot(self, x, y, z):
+        self.board[x,y,z] = None
+
+    def hit(self):
+        self.board[None] = "HIT"
+        
+    def miss(self):
+        self.board[None] = "MISS"
+
+    def sunk(self):
+        self.board[None] = "SUNK"
+
+def next_turn(hit_board: tuple) -> tuple:#funciona??? Hay que definir el hit_board en algun lado e implementar una logica(x ahora es random)
     """Returns the coordinates to shoot next.
 
     Args:
@@ -21,8 +42,12 @@ def next_turn(hit_board: tuple) -> tuple:
     Returns:
         tuple: (x,y,z) to shoot at.
     """
+    x, y, z = ran.randint(0,15), ran.randint(0,15), ran.randint(0,10)
+    return x,y,z
 
-def get_starting_board():
+
+
+def get_starting_board():#FUNCIONA(por ahora es random)
     """
     Gives the board with the airships placed on it. The board is a 3D iterable of 
     strings. 
