@@ -4,28 +4,26 @@ import random as ran
 import objetos as o
 import matplotlib.pyplot as plt
 
-class hitboard:
+class Hitboard:
 
     def __init__(self, opponent_board) -> None:
         self.size = (15,15,10)
         self.board = np.empty(self.size, dtype=object)
-        self.opponent_board = opponent_board
-
-    def create(self):
-        self.board[self.board==None]="?"
+        self.board[self.board == None] = '?' 
+        self.opponent_board = opponent_board  
 
     def take_shot(self, x, y, z):
-        self.board[x,y,z] = None
+        vecs = ['BALLOON_0', 'BALLOON_1',
+        'BALLOON_2', 'BALLOON_3' 'BALLOON_4', 'ZEPPELIN_0', 'ZEPPELIN_1', 'PLANE_0',
+        'PLANE_1', 'PLANE_2', 'ELEVATOR']
 
-    def hit(self):
-        self.board[None] = "HIT"
-        
-    def miss(self):
-        self.board[None] = "MISS"
+        shot = self.opponent_board[x][y][z]
 
-    def sunk(self):
-        self.board[None] = "SUNK"
-
+        if shot == 'EMPTY':
+            self.board[x][y][z] = 'MISS'
+        elif shot in vecs:
+            self.board[x][y][z] = 'HIT'
+       
 def next_turn(hit_board: tuple) -> tuple:#funciona??? Hay que definir el hit_board en algun lado e implementar una logica(x ahora es random)
     """Returns the coordinates to shoot next.
 
@@ -70,8 +68,8 @@ def get_starting_board():#FUNCIONA(por ahora es random)
         for i in range(v.cant):
             while True:
                 x, y, z = ran.randint(0,15), ran.randint(0,15), ran.randint(0,10)
-                if map.verificar_limites(x,y,z,v.largo,v.ancho,v.alto,limites,es_avion):
-                    if not map.verificar_colision(board, x, y, z, v.largo, v.ancho, v.alto, limites, es_avion):
+                if o.Mapa().verificar_limites(x,y,z,v.largo,v.ancho,v.alto,es_avion):
+                    if not o.Mapa().verificar_colision(x, y, z, v.largo, v.ancho, v.alto, es_avion):
                         if es_avion:
                             board[x:x+4,y:y + 1,z:z +1] = f"{v.nombre}_{i}"
                             board[x + 2:x + 3, y - 1:y + 2, z:z +1] = f"{v.nombre}_{i}"
@@ -86,7 +84,10 @@ def get_starting_board():#FUNCIONA(por ahora es random)
 
     return board 
 
+mapa1 = get_starting_board()
+hitboard = Hitboard(mapa1)
 
 
+hitboard.take_shot(0,0,0)
 
-
+print(hitboard.board)

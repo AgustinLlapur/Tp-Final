@@ -3,8 +3,8 @@ import matplotlib.pyplot as plt
 import random as ran
 from mpl_toolkits.mplot3d import Axes3D
 
-
 class Vehiculo:
+
     def __init__(self, nombre, largo, ancho, alto, vida, cant, color):
         self.nombre = nombre
         self.largo = largo
@@ -13,13 +13,17 @@ class Vehiculo:
         self.vida = vida
         self.cant = cant
         self.color = color  # Añadimos el atributo de color
+        self.is_sunken = False
 
+        
     def recibir_disparo(self):
         self.vida -= 1
-        return self
+        if self.vida == 0:
+            self.is_sunken = True
     
     def posicionar(self, x, y, z, voxelarray):
         voxelarray[x:x+self.largo, y:y+self.ancho, z:z+self.alto] = True
+
 
 class Globo(Vehiculo):
     def __init__(self):
@@ -53,9 +57,8 @@ class Mapa:
         self.y_size = 15
         self.z_size = 10
         self.voxelarray = np.zeros((self.x_size, self.y_size, self.z_size), dtype=bool)
-        self.colors = np.empty((self.x_size, self.y_size, self.z_size), dtype=object)  # RGBA values
-        self.fig = plt.figure()
-        self.ax = self.fig.add_subplot(111, projection='3d') 
+        self.colors = np.empty((self.x_size, self.y_size, self.z_size), dtype=object) 
+
 
     def verificar_limites(self, x, y, z, largo, ancho, alto, es_avion=False):
         if es_avion:
@@ -100,6 +103,8 @@ class Mapa:
         plt.pause(0.01)
 
     def plot_vehiculos_usuario(self, vehiculo):
+
+        self.fig, self.ax = plt.subplots(subplot_kw={"projection": "3d"})
         for i in range(vehiculo.cant):
             while True:
                 x, y, z, numero = self.obtener_coordenadas_usuario(vehiculo.nombre, i)
@@ -120,7 +125,7 @@ class Mapa:
                         else:
                             vehiculo.posicionar(x, y, z, self.voxelarray)
                             self.colors[x:x+vehiculo.largo, y:y+vehiculo.ancho, z:z+vehiculo.alto] = vehiculo.color
-
+                        
                         self.dibujar()
                         break
 
@@ -129,11 +134,3 @@ class Mapa:
                 else:
                     print("Las coordenadas exceden los límites del mapa. Por favor, ingrese nuevas coordenadas.")
         
-mapa = Mapa()
-
-vehiculos = [Globo(), Avion(), Zepellin(), Elevador()]
-
-for v in vehiculos:
-    mapa.plot_vehiculos_usuario(v)
-
-plt.show()
