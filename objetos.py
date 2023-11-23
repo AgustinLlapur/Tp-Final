@@ -5,8 +5,8 @@ from mpl_toolkits.mplot3d import Axes3D
 
 class Vehiculo:
 
-    def __init__(self, nombre, largo, ancho, alto, vida, cant, color):
-        self.nombre = nombre
+    def __init__(self, name, largo, ancho, alto, vida, cant, color):
+        self.name = name
         self.largo = largo
         self.ancho = ancho
         self.alto = alto
@@ -15,11 +15,26 @@ class Vehiculo:
         self.color = color  # Añadimos el atributo de color
         self.is_sunken = False
 
+    def get_name(self):
+        return self.name
+
+    def get_self_coords(self):
+        return self.coords
+    
+    def get_size(self):
+        return self.largo, self.ancho, self.alto
+    
+    def get_color(self):
+        return self.color
         
     def recibir_disparo(self):
         self.vida -= 1
         if self.vida == 0:
-            self.is_sunken = True
+            self.sink()
+
+    def sink(self):
+        self.is_sunken = True
+        return self.is_sunken
     
     def posicionar(self, x, y, z, voxelarray):
         voxelarray[x:x+self.largo, y:y+self.ancho, z:z+self.alto] = True
@@ -51,6 +66,28 @@ class Elevador(Vehiculo):
     def __init__(self):
         super().__init__("ELEVATOR", 1, 1, 10, 4, 1, "purple")
 
+class Hitboard:
+
+    def __init__(self, opponent_board) -> None:
+        self.size = (15,15,10)
+        self.board = np.empty(self.size, dtype=object)
+        self.board[self.board == None] = '?' 
+        self.opponent_board = opponent_board  
+
+    def take_shot(self, x, y, z):
+        vecs = ['BALLOON_0', 'BALLOON_1',
+        'BALLOON_2', 'BALLOON_3' 'BALLOON_4', 'ZEPPELIN_0', 'ZEPPELIN_1', 'PLANE_0',
+        'PLANE_1', 'PLANE_2', 'ELEVATOR']
+
+        shot = self.opponent_board[x][y][z]
+
+        if shot == 'EMPTY':
+            self.board[x][y][z] = 'MISS'
+            return False
+        elif shot in vecs:
+            self.board[x][y][z] = 'HIT'
+            return True
+
 class Mapa:
     def __init__(self):
         self.x_size = 15
@@ -58,7 +95,7 @@ class Mapa:
         self.z_size = 10
         self.voxelarray = np.zeros((self.x_size, self.y_size, self.z_size), dtype=bool)
         self.colors = np.empty((self.x_size, self.y_size, self.z_size), dtype=object) 
-
+        self.array_board = np.empty((self.x_size, self.y_size, self.z_size), dtype=object)
 
     def verificar_limites(self, x, y, z, largo, ancho, alto, es_avion=False):
         if es_avion:
@@ -102,20 +139,34 @@ class Mapa:
         plt.draw()
         plt.pause(0.01)
 
+    def starting_board_user(self):
+        vehiculos = [Avion(), Elevador(), Globo(), Zepellin()]
+
+        board = np.empty((self.x_size, self.y_size, self.z_size), dtype=object)
+
+        
+
     def plot_vehiculos_usuario(self, vehiculo):
 
         self.fig, self.ax = plt.subplots(subplot_kw={"projection": "3d"})
         for i in range(vehiculo.cant):
             while True:
-                x, y, z, numero = self.obtener_coordenadas_usuario(vehiculo.nombre, i)
+                try:
+                    x, y, z, numero = self.obtener_coordenadas_usuario(vehiculo.name, i)
+                except ValueError:
+                    print("Ingrese correctamente las coordenadas formato: (x y z)")
+                    continue
 
                 if x is None or y is None or z is None:
                     continue
 
-                es_avion = (vehiculo.nombre == "PLANE")
+                es_avion = (vehiculo.name == "PLANE")
 
                 if self.verificar_limites(x, y, z, vehiculo.largo, vehiculo.ancho, vehiculo.alto, es_avion):
                     if not self.verificar_colision(x, y, z, vehiculo.largo, vehiculo.ancho, vehiculo.alto, es_avion):
+
+                        
+
                         if es_avion:
                             self.colors[x:x+4, y:y+1, z:z+1] = vehiculo.color
                             self.colors[x+2:x+3, y-1:y+2, z:z+1] = vehiculo.color

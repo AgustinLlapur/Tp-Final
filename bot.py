@@ -21,8 +21,10 @@ class Hitboard:
 
         if shot == 'EMPTY':
             self.board[x][y][z] = 'MISS'
+            return False
         elif shot in vecs:
             self.board[x][y][z] = 'HIT'
+            return True
        
 def next_turn(hit_board: tuple) -> tuple:#funciona??? Hay que definir el hit_board en algun lado e implementar una logica(x ahora es random)
     """Returns the coordinates to shoot next.
@@ -45,7 +47,7 @@ def next_turn(hit_board: tuple) -> tuple:#funciona??? Hay que definir el hit_boa
 
 
 
-def get_starting_board():#FUNCIONA(por ahora es random)
+def get_starting_board():
     """
     Gives the board with the airships placed on it. The board is a 3D iterable of 
     strings. 
@@ -84,10 +86,3 @@ def get_starting_board():#FUNCIONA(por ahora es random)
 
     return board 
 
-mapa1 = get_starting_board()
-hitboard = Hitboard(mapa1)
-
-
-hitboard.take_shot(0,0,0)
-
-print(hitboard.board)
