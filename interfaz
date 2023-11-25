@@ -1,3 +1,4 @@
+from typing import Any, Tuple
 import tkinter as tk
 from PIL import Image, ImageTk
 import os
@@ -8,7 +9,14 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import tkinter.font as tkfont
 
 class VentanaJuego:
-    def __init__(self, root):
+    """Clase que representa la ventana del juego con mapas 3D."""
+    def __init__(self, root: tk.Tk) -> None:
+        """
+        Inicializa la ventana del juego.
+
+        Args:
+            root (tk.Tk): La ventana principal de Tkinter.
+        """
         self.root = root
         self.root.title("Mapas 3D")
         
@@ -26,7 +34,13 @@ class VentanaJuego:
 
         self.canvas = self.create_canvas()
 
-    def create_canvas(self):
+    def create_canvas(self) -> Any: # La función puede devolver cualquier tipo de objeto.
+        """
+        Crea el canvas para mostrar los mapas 3D.
+
+        Returns:
+            Any: El canvas para los gráficos 3D.
+        """
         # Crear canvas y pack
         canvas = FigureCanvasTkAgg(self.fig, master=self.root)
         canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
@@ -36,7 +50,13 @@ class VentanaJuego:
         btn_volver.pack(side=tk.BOTTOM, pady=10)
         return canvas
 
-    def draw_empty_grid(self, ax):
+    def draw_empty_grid(self, ax: Axes3D) -> None:
+        """
+        Dibuja la cuadrícula vacía en los mapas 3D.
+
+        Args:
+            ax (Axes3D): Subgráfico tridimensional de Matplotlib.
+        """
         # Definir los límites de los ejes
         ax.set_xlim(0, 15)
         ax.set_ylim(0, 15)
@@ -55,16 +75,26 @@ class VentanaJuego:
         ax.set_ylabel('y')
         ax.set_zlabel('z')
 
-    def volver_al_menu(self):
+    def volver_al_menu(self) -> None:
+        """
+        Cierra la ventana actual y vuelve al menú principal.
+        """
         # Cerrar la ventana actual y volver al menú
         self.root.destroy()
         
 class InicioBatallaNaval:
-    def __init__(self, root):
+    """Clase que representa la pantalla de inicio del juego Batalla Aeronaval."""
+    def __init__(self, root: tk.Tk) -> None:
+        """
+        Inicializa la pantalla de inicio.
+
+        Args:
+            root (tk.Tk): La ventana principal de Tkinter.
+        """
         self.root = root
         self.root.title("Batalla Aeronaval")
         self.root.attributes('-fullscreen', True)
-        self.fuente_personalizada1 = ("Times New Roman", 22, "bold")
+        self.fuente_personalizada1: Tuple[str, int, str] = ("Times New Roman", 22, "bold")
 
         # Carga la fuente personalizada
         self.fuente_personalizada = tkfont.Font(family="Square Pixel7", size=130, weight="bold")
@@ -80,7 +110,10 @@ class InicioBatallaNaval:
 
         self.crear_interfaz_inicio()
 
-    def crear_interfaz_inicio(self):
+    def crear_interfaz_inicio(self) -> None:
+        """
+        Crea la interfaz de inicio con la imagen de fondo y botones.
+        """
         # Configurar el fondo
         lbl_fondo = tk.Label(self.root, image=self.imagen_fondo)
         lbl_fondo.place(x=0, y=0, relwidth=1, relheight=1)
@@ -119,7 +152,10 @@ class InicioBatallaNaval:
         btn_salir = tk.Button(self.root, text="Salir", font=self.fuente_personalizada1, command=self.root.destroy)
         btn_salir.place(relx=0.5, rely=0.55, anchor=tk.CENTER)
         
-    def iniciar_juego(self):
+    def iniciar_juego(self) -> None:
+        """
+        Inicializa la ventana de juego cuando se hace clic en 'Empezar a Jugar'.
+        """
         # Crear una nueva ventana para el juego
         ventana_juego = tk.Toplevel(self.root)
 
