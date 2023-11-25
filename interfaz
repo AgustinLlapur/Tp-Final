@@ -18,8 +18,8 @@ class VentanaJuego:
         self.ax1 = self.fig.add_subplot(121, projection='3d')
         self.ax2 = self.fig.add_subplot(122, projection='3d')
 
-        self.ax1.set_title('Player 1 board')
-        self.ax2.set_title('Player 1 hit board')
+        self.ax1.set_title('User board')
+        self.ax2.set_title('User hit board')
 
         self.draw_empty_grid(self.ax1)
         self.draw_empty_grid(self.ax2)
@@ -62,12 +62,12 @@ class VentanaJuego:
 class InicioBatallaNaval:
     def __init__(self, root):
         self.root = root
-        self.root.title("Batalla Naval")
+        self.root.title("Batalla Aeronaval")
         self.root.attributes('-fullscreen', True)
         self.fuente_personalizada1 = ("Times New Roman", 22, "bold")
 
         # Carga la fuente personalizada
-        self.fuente_personalizada = tkfont.Font(family="Square Pixel7", size=150, weight="bold")
+        self.fuente_personalizada = tkfont.Font(family="Square Pixel7", size=130, weight="bold")
 
         # Obtén la ruta completa del script y construye la ruta completa de la imagen
         script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -92,8 +92,8 @@ class InicioBatallaNaval:
         # Mostrar la imagen de fondo
         canvas.create_image(0, 0, anchor=tk.NW, image=self.imagen_fondo)
 
-        # Mostrar el texto "Batalla Naval" en el centro de la pantalla
-        texto = "Batalla Naval"
+        # Mostrar el texto "Batalla Aeronaval" en el centro de la pantalla
+        texto = "Batalla Aeronaval"
         canvas.create_text(
             self.root.winfo_screenwidth() / 2,  # Posición x del texto
             self.root.winfo_screenheight() / 4,  # Posición y del texto
