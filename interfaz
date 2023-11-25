@@ -1,0 +1,132 @@
+import tkinter as tk
+from PIL import Image, ImageTk
+import os
+import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+import tkinter.font as tkfont
+
+class VentanaJuego:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Mapas 3D")
+        
+        self.fig = plt.figure(figsize=(10, 5))
+
+        # Crear subgráficos para los dos mapas
+        self.ax1 = self.fig.add_subplot(121, projection='3d')
+        self.ax2 = self.fig.add_subplot(122, projection='3d')
+
+        self.ax1.set_title('Player 1 board')
+        self.ax2.set_title('Player 1 hit board')
+
+        self.draw_empty_grid(self.ax1)
+        self.draw_empty_grid(self.ax2)
+
+        self.canvas = self.create_canvas()
+
+    def create_canvas(self):
+        # Crear canvas y pack
+        canvas = FigureCanvasTkAgg(self.fig, master=self.root)
+        canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
+
+        # Agregar botón para volver al menú
+        btn_volver = tk.Button(self.root, text="Volver al Menú", command=self.volver_al_menu)
+        btn_volver.pack(side=tk.BOTTOM, pady=10)
+        return canvas
+
+    def draw_empty_grid(self, ax):
+        # Definir los límites de los ejes
+        ax.set_xlim(0, 15)
+        ax.set_ylim(0, 15)
+        ax.set_zlim(0, 10)
+
+        # Crear una cuadrícula vacía utilizando plot_surface con rstride y cstride en 1
+        X = np.arange(0, 16)
+        Y = np.arange(0, 16)
+        X, Y = np.meshgrid(X, Y)
+        Z = np.zeros_like(X)
+
+        ax.plot_surface(X, Y, Z, color='none', edgecolor='none', alpha=0)
+
+        # Establecer etiquetas de los ejes
+        ax.set_xlabel('x')
+        ax.set_ylabel('y')
+        ax.set_zlabel('z')
+
+    def volver_al_menu(self):
+        # Cerrar la ventana actual y volver al menú
+        self.root.destroy()
+        
+class InicioBatallaNaval:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Batalla Naval")
+        self.root.attributes('-fullscreen', True)
+        self.fuente_personalizada1 = ("Times New Roman", 22, "bold")
+
+        # Carga la fuente personalizada
+        self.fuente_personalizada = tkfont.Font(family="Square Pixel7", size=150, weight="bold")
+
+        # Obtén la ruta completa del script y construye la ruta completa de la imagen
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        imagen_path = os.path.join(script_dir, "fondo_inicio.jpg")
+
+        # Cargar la imagen de fondo y almacenarla como un atributo de la instancia
+        imagen_original = Image.open(imagen_path)
+        imagen_redimensionada = imagen_original.resize((self.root.winfo_screenwidth(), self.root.winfo_screenheight()))
+        self.imagen_fondo = ImageTk.PhotoImage(imagen_redimensionada)
+
+        self.crear_interfaz_inicio()
+
+    def crear_interfaz_inicio(self):
+        # Configurar el fondo
+        lbl_fondo = tk.Label(self.root, image=self.imagen_fondo)
+        lbl_fondo.place(x=0, y=0, relwidth=1, relheight=1)
+
+        # Crear un canvas sobre la imagen de fondo
+        canvas = tk.Canvas(self.root, width=self.root.winfo_screenwidth(), height=self.root.winfo_screenheight())
+        canvas.pack()
+
+        # Mostrar la imagen de fondo
+        canvas.create_image(0, 0, anchor=tk.NW, image=self.imagen_fondo)
+
+        # Mostrar el texto "Batalla Naval" en el centro de la pantalla
+        texto = "Batalla Naval"
+        canvas.create_text(
+            self.root.winfo_screenwidth() / 2,  # Posición x del texto
+            self.root.winfo_screenheight() / 4,  # Posición y del texto
+            text=texto,
+            font=self.fuente_personalizada,
+            fill="white" # Color del texto
+        )
+
+        # Agregar un borde alrededor del texto
+        canvas.create_text(
+            self.root.winfo_screenwidth() / 2 + 2,  # Desplazar el texto en x para simular el borde
+            self.root.winfo_screenheight() / 4 + 2,  # Desplazar el texto en y para simular el borde
+            text=texto,
+            font=self.fuente_personalizada,
+            fill="black",  # Color del borde
+        )
+
+        # Botón para empezar a jugar
+        btn_empezar = tk.Button(self.root, text="Empezar a Jugar", font=self.fuente_personalizada1, command=self.iniciar_juego)
+        btn_empezar.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+
+        # Botón para salir
+        btn_salir = tk.Button(self.root, text="Salir", font=self.fuente_personalizada1, command=self.root.destroy)
+        btn_salir.place(relx=0.5, rely=0.55, anchor=tk.CENTER)
+        
+    def iniciar_juego(self):
+        # Crear una nueva ventana para el juego
+        ventana_juego = tk.Toplevel(self.root)
+
+        # Crear la ventana del juego
+        juego = VentanaJuego(ventana_juego)
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    inicio_juego = InicioBatallaNaval(root)
+    root.mainloop()
