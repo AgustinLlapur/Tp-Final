@@ -7,6 +7,7 @@ import bot as bot
 
 def main():
 
+    #PRIMERA PARTE(EL USUARIO ARMA SU MAPA)
     mapa = obj.Mapa()
 
     globo = obj.Globo()
@@ -18,6 +19,16 @@ def main():
 
     for vehiculo in vehiculos:
         mapa.plot_vehiculos_usuario(vehiculo)
+
+    #plt.show() 
+
+    #MAPA DE LA PC
+    mapa_pc = bot.get_starting_board()
+
+    #y ahora?????????????
+    while True:
+        pass
+
 
 if __name__ == "__main__":
     main()
