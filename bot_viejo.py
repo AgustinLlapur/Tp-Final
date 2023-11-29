@@ -1,6 +1,6 @@
 import numpy as np
 import random as ran
-import objetos as o
+import objetos_viejo as o
 import matplotlib.pyplot as plt
 
 class Bot:

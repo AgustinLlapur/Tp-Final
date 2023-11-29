@@ -74,7 +74,7 @@ def main():
         print("\nTurno del Usuario:")
         user_shot_coords = usuario.dispara_usuario()
         result = player_hitboard.take_shot(user_shot_coords[0], user_shot_coords[1], user_shot_coords[2], dicc_vehicle_pc)
-        dibujo_player.dibujar()
+        
         print(f"¡Disparo {result}!")
         
 

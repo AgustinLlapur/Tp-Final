@@ -1,6 +1,6 @@
 import numpy as np
-import objetos as obj
-import bot as pc
+import objetos_viejo as obj
+import bot_viejo as pc
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D  
 
@@ -74,7 +74,6 @@ def main():
         print("\nTurno del Usuario:")
         user_shot_coords = usuario.dispara_usuario()
         result = player_hitboard.take_shot(user_shot_coords[0], user_shot_coords[1], user_shot_coords[2], dicc_vehicle_pc)
-        dibujo_player.dibujar()
         print(f"¡Disparo {result}!")
         
 

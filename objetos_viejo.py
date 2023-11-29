@@ -2,7 +2,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import random as ran
 from mpl_toolkits.mplot3d import Axes3D
-import mapa as m
 
 
 class Player:
@@ -124,39 +123,6 @@ class Player:
                             break
                         
         return self.mapa.array_board
-
-    def next_turn(self, hit_board: tuple) -> tuple:
-        """Returns the coordinates to shoot next.
-
-        Args:
-            hit_board (tuple): A 3D iterable of strings representing the hit board.
-            Each cell can be accessed by hit_board[x][y][z].
-
-            Each cell has 4 possible values:
-            - '?': No shot has been done there.
-            - 'HIT': An airship has been hit there before.
-            - 'MISS': A shot has been done there but did not hit any airship.
-            - 'SUNK': An airship was there but has already been shot down entirely.
-
-        Returns:
-            tuple: (x,y,z) to shoot at.
-        """
-
-        while True:
-            x, y, z = ran.randint(0, 14), ran.randint(0, 14), ran.randint(0, 9)
-
-            if hit_board[x][y][z] != '?':
-                
-                if hit_board[x][y][z] == 'HIT':
-                    directions = [(1, 0, 0), (-1, 0, 0), (0, 1, 0), (0, -1, 0), (0, 0, 1), (0, 0, -1)]
-                    for dx, dy, dz in directions:
-                        new_x, new_y, new_z = x + dx, y + dy, z + dz
-                        if 0 <= new_x <= 14 and 0 <= new_y <= 14 and 0 <= new_z <= 9:
-                            return new_x, new_y, new_z
-                else: 
-                    continue
-            else:
-                return x, y, z
 
 
 class Hitboard:
@@ -330,14 +296,14 @@ class Dibujar:
         
         self.ax1.clear()  # Limpiar los ejes en lugar de toda la figura
         self.ax1.set_title('Mapa del Jugador')
-        self.ax1.voxels(self.mapa.voxelarray, edgecolor='gray', facecolors=self.mapa.colors, alpha=0.4)
+        self.ax1.voxels(self.mapa.voxelarray, edgecolor='k', facecolors=self.mapa.colors, alpha=0.8)
         self.ax1.set_xlabel("X")
         self.ax1.set_ylabel("Y")
         self.ax1.set_zlabel("Z")
                 
         self.ax2.clear()  # Limpiar los ejes en lugar de toda la figura
         self.ax2.set_title('Hitboard del jugador')
-        self.ax2.voxels(self.hitboard.plot_board, edgecolor='gray', facecolors=self.hitboard.colors, alpha=0.4)
+        self.ax2.voxels(self.hitboard.plot_board, edgecolor='k', facecolors=self.hitboard.colors, alpha=0.8)
         self.ax2.set_xlabel("X")
         self.ax2.set_ylabel("Y")
         self.ax2.set_zlabel("Z")
